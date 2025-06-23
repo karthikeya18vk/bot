@@ -10,11 +10,12 @@ const SignUp = () => {
   const handleChange = (e) => {
     setFormData({...formData, [e.target.name]: e.target.value});
   };
+  const API_BASE_URL = 'https://ai-chat-bot-dgdr.onrender.com';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/auth/signup', formData);
+      await axios.post(`${API_BASE_URL}/api/auth/signup`, formData);
       alert('Registered Successfully!')
       navigate('/login');
     } catch (err) {

@@ -12,12 +12,13 @@ const [password, setPassword] = useState("");
   const handleChange = (e) => {
     setFormData({...formData, [e.target.name]: e.target.value});
   };
+  const API_BASE_URL = 'https://ai-chat-bot-dgdr.onrender.com';
 
   const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
-    const response = await axios.post("http://localhost:5000/api/auth/login", {
+    const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
       email,
       password,
     });
