@@ -37,7 +37,7 @@ app.post("/api/chat", async (req, res) => {
     headers: {
       Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
       "Content-Type": "application/json",
-      "HTTP-Referer": "https://your-frontend-url.onrender.com", // <- Replace this
+      "HTTP-Referer": "https://frontbot-2jb6.onrender.com", // <- Replace this
       "X-Title": "MERN ChatBot"
     }
   }
