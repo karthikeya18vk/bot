@@ -12,7 +12,5 @@ services:
   - type: web
     name: ai-chat-bot-frontend
     env: static
-    plan: free
     buildCommand: cd front && npm install && npm run build
     staticPublishPath: front/build
-
