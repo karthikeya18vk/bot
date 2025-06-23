@@ -3,8 +3,8 @@ services:
     name: ai-chat-bot
     env: node
     plan: free
-    buildCommand: npm install
-    startCommand: node server.js
+    buildCommand: cd front && npm install
+    startCommand: cd back && node server.js
     envVars:
       - key: NODE_ENV
         value: production
