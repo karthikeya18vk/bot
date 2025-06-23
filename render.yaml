@@ -1,12 +1,18 @@
 services:
   - type: web
-    name: ai-chat-bot
+    name: ai-chat-bot-backend
     env: node
     plan: free
-    buildCommand: |
-      cd back && npm install
-      cd ../front && npm install
+    buildCommand: cd back && npm install
     startCommand: cd back && node server.js
     envVars:
-      - key: NODE_ENV
-        value: production
+      - key: MONGO_URI
+        value: your_mongodb_atlas_uri_here
+
+  - type: web
+    name: ai-chat-bot-frontend
+    env: static
+    plan: free
+    buildCommand: cd front && npm install && npm run build
+    staticPublishPath: front/build
+
