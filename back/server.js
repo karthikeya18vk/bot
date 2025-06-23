@@ -28,20 +28,20 @@ app.post("/api/chat", async (req, res) => {
 
   try {
     const response = await axios.post(
-      "https://openrouter.ai/api/v1/chat/completions",
-      {
-        model: "deepseek/deepseek-r1-0528-qwen3-8b:free",
-        messages
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-          "Content-Type": "application/json",
-          "HTTP-Referer": "http://localhost:3000",
-          "X-Title": "MERN ChatBot"
-        }
-      }
-    );
+  "https://openrouter.ai/api/v1/chat/completions",
+  {
+    model: "deepseek/deepseek-r1-0528-qwen3-8b:free",
+    messages
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+      "Content-Type": "application/json",
+      "HTTP-Referer": "https://your-frontend-url.onrender.com", // <- Replace this
+      "X-Title": "MERN ChatBot"
+    }
+  }
+);
 
     const reply = response.data.choices[0].message.content;
     res.json({ reply });
