@@ -20,6 +20,7 @@ const transporter = nodemailer.createTransport({
 router.post('/signup', async (req, res) => {
   const { name, email, password } = req.body;
   const otp = crypto.randomInt(100000, 999999).toString();
+
   try {
     let user = await User.findOne({ email });
 
@@ -36,9 +37,13 @@ router.post('/signup', async (req, res) => {
       user.password = hashedPassword;
     }
 
-    user.otp = otp;
-    user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 min
     await user.save();
+
+    // ✅ Store OTP in memory
+    otpStore[email] = {
+      otp,
+      expiry: Date.now() + 10 * 60 * 1000 // 10 minutes
+    };
 
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
@@ -57,18 +62,26 @@ router.post('/signup', async (req, res) => {
 // POST /api/auth/verify-otp - verify OTP
 router.post('/verify-otp', async (req, res) => {
   const { email, otp } = req.body;
+
+  const record = otpStore[email];
+
+  if (!record) {
+    return res.status(400).json({ msg: 'No OTP found for this email' });
+  }
+
+  if (record.otp !== otp || record.expiry < Date.now()) {
+    return res.status(400).json({ msg: 'Invalid or expired OTP' });
+  }
+
   try {
     const user = await User.findOne({ email });
-
     if (!user) return res.status(400).json({ msg: 'User not found' });
-    if (user.otp !== otp || user.otpExpiry < Date.now()) {
-      return res.status(400).json({ msg: 'Invalid or expired OTP' });
-    }
 
     user.isVerified = true;
-    user.otp = undefined;
-    user.otpExpiry = undefined;
     await user.save();
+
+    // ✅ Clear OTP from memory after verification
+    delete otpStore[email];
 
     res.status(200).json({ msg: 'OTP verified successfully' });
   } catch (err) {
@@ -76,6 +89,7 @@ router.post('/verify-otp', async (req, res) => {
     res.status(500).json({ msg: 'Server error during OTP verification' });
   }
 });
+
 
 
 /*router.post('/signup', async (req, res) => {
