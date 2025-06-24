@@ -45,12 +45,12 @@ router.post('/signup', async (req, res) => {
       expiry: Date.now() + 10 * 60 * 1000 // 10 minutes
     };
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: 'Your OTP for Signup Verification',
-      text: `Your OTP is ${otp}`
-    });
+   await transporter.sendMail({
+  from: `"AI ChatBot" <${process.env.EMAIL_USER}>`, // ✅ Custom sender name
+  to: email,
+  subject: 'Your OTP for Signup Verification',
+  text: `Your OTP is ${otp}`
+});
 
     res.status(200).json({ msg: 'OTP sent to email' });
   } catch (err) {
