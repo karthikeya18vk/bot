@@ -6,7 +6,7 @@ const router = express.Router();
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 
-
+const otpStore = {};
 // Create email transporter
 const transporter = nodemailer.createTransport({
   service: 'gmail',
